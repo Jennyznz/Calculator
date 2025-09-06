@@ -1,0 +1,25 @@
+#calculator-box{
+    display: flex;
+    flex-direction: column;
+}
+
+#display{
+    background-color:blanchedalmond;
+    width: 200px;
+    height: 30px;
+}
+
+#buttons-box{
+    display: flex;
+    flex-direction: row;
+}
+
+.col{
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    width: 500px;
+    margin: 0 auto;
+}
