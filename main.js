@@ -5,6 +5,11 @@ let operator = "";
 const buttonsBox = document.getElementById("buttons-box");
 const ops = document.querySelectorAll(".op");   // ops is a NodeList
 
+// For keyboard events
+let eqEnabled = false;
+let opsEnabled = false;
+let decimalEnabled = true;
+
 // When user uses the keyboard
 document.addEventListener("keydown", (e) => {
     const key = e.key;
@@ -14,32 +19,42 @@ document.addEventListener("keydown", (e) => {
         // Enable "="" and ops
     if ("0123456789".includes(key)){
         document.getElementById("display-content").textContent += key;
+        opsEnabled = true;
         ops.forEach(op => op.classList.remove("disabled"));
+
         if (!(operator === "")) {
-            document.querySelector(".eq").classList.remove("disabled");
+            eqEnabled = true;
+            document.querySelector('.eq').classList.remove("disabled");
         }
     }
 
-    else if ("+-*/".includes(key)){
+    else if (opsEnabled && "+-*/".includes(key)){
         // Store first num and op
         numOne = parseFloat(document.getElementById("display-content").textContent);
         operator = key;
         // Add op to display
         document.getElementById("display-content").textContent += key;
         // Prevent consecutive selection of ops
+        opsEnabled = false;
         ops.forEach(op => op.classList.add("disabled"));
         // Prevent "=" after an op
-        document.querySelector(".eq").classList.add("disabled");
+        eqEnabled = false;
+        document.querySelector('.eq').classList.add("disabled");
+        decimalEnabled = true;
+        document.querySelector('.decimal').classList.remove("disabled");
+
 
     }
 
-    else if ((key === "=" || key === "Enter") && !(isNaN(numOne))){
+    else if (eqEnabled && (key === "=" || key === "Enter") && !(isNaN(numOne))){
         // Store second num
         let allText = document.getElementById("display-content").textContent;
         let parts = allText.split(operator);
         numTwo = parseFloat(parts[1]);
         // Enable op selection and decimal point
+        opsEnabled = true;
         ops.forEach(op => op.classList.remove("disabled"));
+        decimalEnabled = true;
         document.querySelector('.decimal').classList.remove("disabled");
         // Calculate
         // Update display
@@ -53,14 +68,37 @@ document.addEventListener("keydown", (e) => {
         document.getElementById("display-content").textContent = document.getElementById("display-content").textContent.slice(0, -1);
 
         // Operator case
+        opsEnabled = true;
         ops.forEach(op => op.classList.remove("disabled"));
         operator = "";
     }
     // Add decimal point (max one for each number)
-    else if (key === "."){
-        document.getElementById("display-content").textContent += content;
-        document.querySelector('.decimal').classList.add(disabled);
+    else if (decimalEnabled && key === "."){
+        document.getElementById("display-content").textContent += key;
+        decimalEnabled = false;
+        document.querySelector('.decimal').classList.add("disabled");
     }
+
+    // // Connect keyboard event to webpage visuals
+    // if (eqEnabled === false) {
+    //     document.querySelector('.eq').classList.add("disabled");
+    // }
+    // if (opsEnabled === false) {
+    //     ops.forEach(op => op.classList.add("disabled"));
+    // }
+    // if (decimalEnabled === false) {
+    //     document.querySelector('.decimal').classList.add("disabled");
+    // }
+    // if (eqEnabled === true) {
+    //     document.querySelector('.eq').classList.remove("disabled");
+    // }
+    // if (opsEnabled === true) {
+    //     ops.forEach(op => op.classList.remove("disabled"));
+    // }
+    // if (decimalEnabled === true) {
+    //     document.querySelector('.decimal').classList.remove("disabled");
+    // }
+
 });
 
 
@@ -89,7 +127,8 @@ buttonsBox.addEventListener("click", (e) => {
         ops.forEach(op => op.classList.add("disabled"));
         // Prevent "=" after an op
         document.querySelector(".eq").classList.add("disabled");
-
+        // Enable "." for the next num
+        document.querySelector('.decimal').classList.remove("disabled");
     }
 
     else if (target.classList.contains("eq") && !(isNaN(numOne))){
@@ -112,6 +151,9 @@ buttonsBox.addEventListener("click", (e) => {
         document.querySelector('.decimal').classList.remove("disabled");
         document.querySelector('.eq').classList.add("disabled");
         ops.forEach(op => op.classList.add("disabled"));
+        operator = "";
+        numOne = NaN;
+        numTwo = NaN;
     }
 
     // Undo latest click
@@ -155,11 +197,11 @@ function subtract(x, y) {
 }
 
 function multiply(x, y) {
-    return (x * y).toFixed(5);
+    return parseFloat((x * y).toFixed(5));
 }
 
 function divide(x, y){
     // Round to nearest five decimal digits
-    return (x / y).toFixed(5); // all JS arithmetic is done in floating point
+    return parseFloat((x / y).toFixed(5)); // all JS arithmetic is done in floating point
 }
 
