@@ -1,8 +1,8 @@
 Calculator Webpage
+(HTML, CSS, JS)
 
-- HTML, CSS, JS
-- Basic math operations
+- Performs basic math operations
 - Accommodates floating points
 - Accommodates backspace
-- Keyboard support
+- Incorporates keyboard support
 - Rounds decimals
