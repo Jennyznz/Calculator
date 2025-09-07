@@ -95,10 +95,11 @@ function subtract(x, y) {
 }
 
 function multiply(x, y) {
-    return (x * y);
+    return (x * y).toFixed(5);
 }
 
 function divide(x, y){
-    return (x / y); // all JS arithmetic is done in floating point
+    // Round to nearest five decimal digits
+    return (x / y).toFixed(5); // all JS arithmetic is done in floating point
 }
 
