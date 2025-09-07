@@ -1,8 +1,43 @@
-const numOne = 0;
-const numTwo = 0;
-const operator = "";
+let numOne = NaN;
+let numTwo = NaN;
+let operator = "";
+
+const buttonsBox = document.getElementById("buttons-box");
+const ops = document.querySelectorAll(".op");   // ops is a NodeList
+
+buttonsBox.addEventListener("click", (e) => {
+    const target = e.target;
+    const content = target.textContent;
+
+    // Add digits to display
+    if (target.classList.contains("num")){
+        document.getElementById("display-content").innerHTML += content;
+    }
+
+    if (target.classList.contains("op")){
+        // Store first num and op
+        numOne = parseFloat(document.getElementById("display-content").textContent);
+        operator = content;
+        // Add op to display
+        document.getElementById("display-content").innerHTML += content;
+        // Prevent consecutive selection of ops
+        ops.forEach(op => op.classList.add("disabled"));
+    }
 
 
+    if (target.classList.contains("eq") && !(numOne === NaN)){
+        // Store second num
+        let allText = document.getElementById("display-content").textContent;
+        let parts = allText.split(operator);
+        numTwo = parseFloat(parts[1]);
+        // Enable op selection
+        ops.forEach(op => op.classList.remove("disabled"));
+        // Calculate
+        // Update display
+        document.getElementById("display-content").innerHTML = operate(numOne, numTwo, operator);
+
+    }
+});
 
 // Performs calculation
 function operate (a, b, op) {
