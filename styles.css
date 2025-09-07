@@ -51,7 +51,7 @@
     width: 110px;
 }
 
-.button.delete{
+.button.undo{
     width: 110px;
 }
 
@@ -84,7 +84,7 @@ body {
     margin: 0;
 }
 
-*{
+* {
     background-color: #C8DAA6;
     border: 0;
 }

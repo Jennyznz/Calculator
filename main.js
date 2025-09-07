@@ -10,11 +10,15 @@ buttonsBox.addEventListener("click", (e) => {
     const content = target.textContent;
 
     // Add digits to display
+    // Enable "=""
     if (target.classList.contains("num")){
         document.getElementById("display-content").innerHTML += content;
+        if (!(operator === "")) {
+            document.querySelector(".eq").classList.remove("disabled");
+        }
     }
 
-    if (target.classList.contains("op")){
+    else if (target.classList.contains("op")){
         // Store first num and op
         numOne = parseFloat(document.getElementById("display-content").textContent);
         operator = content;
@@ -22,10 +26,12 @@ buttonsBox.addEventListener("click", (e) => {
         document.getElementById("display-content").innerHTML += content;
         // Prevent consecutive selection of ops
         ops.forEach(op => op.classList.add("disabled"));
+        // Prevent "=" after an op
+        document.querySelector(".eq").classList.add("disabled");
+
     }
 
-
-    if (target.classList.contains("eq") && !(numOne === NaN)){
+    else if (target.classList.contains("eq") && !(numOne === NaN)){
         // Store second num
         let allText = document.getElementById("display-content").textContent;
         let parts = allText.split(operator);
@@ -35,7 +41,21 @@ buttonsBox.addEventListener("click", (e) => {
         // Calculate
         // Update display
         document.getElementById("display-content").innerHTML = operate(numOne, numTwo, operator);
+    }
 
+    // Clear display
+    else if (target.classList.contains("clear")){
+        document.getElementById("display-content").innerHTML = "";
+    }
+
+    // Undo latest click
+    else if (target.classList.contains("undo")){
+        // Undo
+        document.getElementById("display-content").innerHTML = document.getElementById("display-content").innerHTML.slice(0, -1);
+
+        // Operator case
+        ops.forEach(op => op.classList.remove("disabled"));
+        operator = "";
     }
 });
 

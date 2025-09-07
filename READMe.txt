@@ -5,3 +5,4 @@ Calculator Webpage
 - Accommodates floating points
 - Accommodates backspace
 - Keyboard support
+- Rounds decimals
